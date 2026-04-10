@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:sos_project_mobile/screens/android/client_screen.dart';
+import 'package:sos_project_mobile/screens/android/dashboard_screen.dart';
+import 'package:sos_project_mobile/screens/android/orders_screen.dart';
+import 'package:sos_project_mobile/screens/android/profile_screen.dart';
+import 'package:sos_project_mobile/screens/android/service_screen.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -11,11 +16,11 @@ class _HomeState extends State<Home> {
   int _selectedIndex = 0;
 
   static const List<Widget> _pages = [
-    Center(child: Text('Página Inicial')),
-    Center(child: Text('Página Clientes')),
-    Center(child: Text('Página Serviços')),
-    Center(child: Text('Página Ordens')),
-    Center(child: Text('Página Perfil'))
+    DashboardScreen(),
+    ClientScreen(),
+    ServiceScreen(),
+    OrdersScreen(),
+    ProfileScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -33,32 +38,20 @@ class _HomeState extends State<Home> {
         onTap: _onItemTapped,
         selectedItemColor: Colors.blue,
         items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Início'),
+          BottomNavigationBarItem(icon: Icon(Icons.group), label: 'Clientes'),
+          BottomNavigationBarItem(icon: Icon(Icons.build), label: 'Serviços'),
           BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Início'
+            icon: Icon(Icons.assignment),
+            label: 'Ordens',
           ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.group),
-              label: 'Clientes'
-          ),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.build),
-              label: 'Serviços'
-          ),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.assignment),
-              label: 'Ordens'
-          ),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.person_pin),
-              label: 'Profile'
+            icon: Icon(Icons.person_pin),
+            label: 'Profile',
           ),
         ],
       ),
-      body: Container(
-          color: Colors.green,
-      ),
+      body: _pages[_selectedIndex],
     );
   }
 }
-
