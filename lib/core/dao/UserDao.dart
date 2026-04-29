@@ -3,7 +3,7 @@ import 'package:sos_project_mobile/core/app_database.dart';
 import '../model/user.dart';
 
 class UserDAO {
-  static const String table = 'user';
+  static const String table = 'users';
 
   Future<int> insertUser(User user) async {
     final db = await AppDatabase().database;

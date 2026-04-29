@@ -75,6 +75,7 @@ class RegisterScreen extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: 32.0, vertical: 16.0),
                   child: TextFormField(
                     controller: passwordController,
+                    obscureText: true,
                     validator: (value) {
                       if (value != null && value.isNotEmpty) {
                         return null;
