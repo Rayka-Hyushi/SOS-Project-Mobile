@@ -92,7 +92,8 @@ class ServiceCard extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const EditServiceScreen(isEditing: true),
+                        builder: (context) =>
+                            const EditServiceScreen(isEditing: true),
                       ),
                     );
                   },

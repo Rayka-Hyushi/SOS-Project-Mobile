@@ -6,7 +6,7 @@ import 'package:sos_project_mobile/screens/android/sosapp.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   // Força os ícones da barra de status a ficarem escuros (pretos)
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(

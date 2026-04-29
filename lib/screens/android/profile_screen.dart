@@ -108,33 +108,49 @@ class ProfileScreen extends StatelessWidget {
                       label: 'Editar dados pessoais',
                       onTap: () {},
                     ),
-                    const Divider(height: 1, thickness: 1, color: Colors.black12),
+                    const Divider(
+                      height: 1,
+                      thickness: 1,
+                      color: Colors.black12,
+                    ),
                     SettingsTile(
                       icon: Icons.crop_square,
                       label: 'Alterar senha',
                       onTap: () {},
                     ),
-                    const Divider(height: 1, thickness: 1, color: Colors.black12),
+                    const Divider(
+                      height: 1,
+                      thickness: 1,
+                      color: Colors.black12,
+                    ),
                     SettingsTile(
                       icon: Icons.crop_square,
                       label: 'Tema escuro',
                       trailing: Switch(
                         value: false,
                         onChanged: (v) {},
-                        activeColor: Colors.green,
+                        activeThumbColor: Colors.green,
                       ),
                     ),
-                    const Divider(height: 1, thickness: 1, color: Colors.black12),
+                    const Divider(
+                      height: 1,
+                      thickness: 1,
+                      color: Colors.black12,
+                    ),
                     SettingsTile(
                       icon: Icons.crop_square,
                       label: 'Notificações push',
                       trailing: Switch(
                         value: true,
                         onChanged: (v) {},
-                        activeColor: Colors.green,
+                        activeThumbColor: Colors.green,
                       ),
                     ),
-                    const Divider(height: 1, thickness: 1, color: Colors.black12),
+                    const Divider(
+                      height: 1,
+                      thickness: 1,
+                      color: Colors.black12,
+                    ),
                     SettingsTile(
                       icon: Icons.crop_square,
                       label: 'Sobre o SOS Project',
@@ -229,10 +245,13 @@ class SettingsTile extends StatelessWidget {
             Expanded(
               child: Text(
                 label,
-                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                ),
               ),
             ),
-            if (trailing != null) trailing!,
+            ?trailing,
           ],
         ),
       ),

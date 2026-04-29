@@ -28,31 +28,40 @@ class EditClientScreen extends StatelessWidget {
             children: [
               Text(
                 isEditing ? 'Informações do Cliente' : 'Cadastro de Cliente',
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const SizedBox(height: 20),
-              
+
               // Campo Nome
               const CustomTextField(label: 'Nome', hint: 'Ex: Brown Fox'),
               const SizedBox(height: 15),
-              
+
               // Campo E-mail
-              const CustomTextField(label: 'E-mail', hint: 'Ex: brownfox@gmail.com'),
+              const CustomTextField(
+                label: 'E-mail',
+                hint: 'Ex: brownfox@gmail.com',
+              ),
               const SizedBox(height: 15),
-              
+
               // Campo Telefone
-              const CustomTextField(label: 'Telefone', hint: 'Ex: (00) 01234-5678'),
+              const CustomTextField(
+                label: 'Telefone',
+                hint: 'Ex: (00) 01234-5678',
+              ),
               const SizedBox(height: 15),
-              
+
               // Campo Endereço
               const CustomTextField(
-                label: 'Endereço', 
+                label: 'Endereço',
                 hint: 'Ex: Rua Um, 00, Santa Maria - RS',
                 maxLines: 3,
               ),
-              
+
               const SizedBox(height: 40),
-              
+
               // Botões de Ação
               Row(
                 children: [
@@ -66,7 +75,10 @@ class EditClientScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      child: const Text('Cancelar', style: TextStyle(color: Colors.black)),
+                      child: const Text(
+                        'Cancelar',
+                        style: TextStyle(color: Colors.black),
+                      ),
                     ),
                   ),
                   const SizedBox(width: 15),

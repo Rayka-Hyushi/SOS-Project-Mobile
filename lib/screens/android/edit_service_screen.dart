@@ -28,27 +28,33 @@ class EditServiceScreen extends StatelessWidget {
             children: [
               Text(
                 isEditing ? 'Informações do Serviço' : 'Cadastro de Serviço',
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const SizedBox(height: 20),
-              
+
               // Campo Nome do Serviço
-              const CustomTextField(label: 'Serviço', hint: 'Ex: Troca de Tela'),
+              const CustomTextField(
+                label: 'Serviço',
+                hint: 'Ex: Troca de Tela',
+              ),
               const SizedBox(height: 15),
-              
+
               // Campo Descrição
               const CustomTextField(
-                label: 'Descrição', 
+                label: 'Descrição',
                 hint: 'Ex: Remoção de tela antiga e aplicação de uma nova.',
                 maxLines: 3,
               ),
               const SizedBox(height: 15),
-              
+
               // Campo Valor
               const CustomTextField(label: 'Valor', hint: 'Ex: 80,00'),
-              
+
               const SizedBox(height: 40),
-              
+
               // Botões de Ação
               Row(
                 children: [
@@ -62,7 +68,10 @@ class EditServiceScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      child: const Text('Cancelar', style: TextStyle(color: Colors.black)),
+                      child: const Text(
+                        'Cancelar',
+                        style: TextStyle(color: Colors.black),
+                      ),
                     ),
                   ),
                   const SizedBox(width: 15),
