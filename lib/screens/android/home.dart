@@ -15,14 +15,6 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   int _selectedIndex = 0;
 
-  static const List<Widget> _pages = [
-    DashboardScreen(),
-    ClientScreen(),
-    ServiceScreen(),
-    OrdersScreen(),
-    ProfileScreen(),
-  ];
-
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -31,6 +23,14 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> pages = [
+      DashboardScreen(),
+      ClientScreen(),
+      ServiceScreen(),
+      OrdersScreen(),
+      ProfileScreen(),
+    ];
+
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
@@ -51,7 +51,7 @@ class _HomeState extends State<Home> {
           ),
         ],
       ),
-      body: _pages[_selectedIndex],
+      body: pages[_selectedIndex],
     );
   }
 }

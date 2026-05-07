@@ -17,6 +17,9 @@ class AppDatabase {
 
   Future<Database> _InitDatabase() async {
     final path = join(await getDatabasesPath(), 'database.db');
+
+    await deleteDatabase(path);
+
     return openDatabase(
       path,
       version: 1,
@@ -38,6 +41,34 @@ class AppDatabase {
             name TEXT,
             u_id INTEGER,
             FOREIGN KEY (u_id) REFERENCES users (id) ON DELETE CASCADE
+          )
+        ''');
+        await db.execute('''
+          CREATE TABLE services(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            servico TEXT,
+            desc TEXT,
+            valor REAL,
+            u_id INTEGER,
+            FOREIGN KEY (u_id) REFERENCES users (id) ON DELETE CASCADE
+          )
+        ''');
+        await db.execute('''
+          CREATE TABLE orders(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            equipment TEXT,
+            brand TEXT,
+            model TEXT,
+            sn TEXT,
+            problem TEXT,
+            status TEXT,
+            open_date TEXT,
+            close_date TEXT,
+            value REAL,
+            u_id INTEGER,
+            client_id INTEGER,
+            FOREIGN KEY (u_id) REFERENCES users (id) ON DELETE CASCADE,
+            FOREIGN KEY (client_id) REFERENCES clients (id) ON DELETE CASCADE
           )
         ''');
       }

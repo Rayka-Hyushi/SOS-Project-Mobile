@@ -43,4 +43,9 @@ class UserDAO {
 
     return result.map((element) => User.fromMap(element)).toList();
   }
+
+  Future<void> logout() async {
+    final db = await AppDatabase().database;
+    await db.delete(table);
+  }
 }

@@ -1,16 +1,57 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sos_project_mobile/core/model/client.dart';
+import 'package:sos_project_mobile/core/services/client_service.dart';
+import 'package:sos_project_mobile/core/user_session.dart';
 
-class EditClientScreen extends StatelessWidget {
+class EditClientScreen extends StatefulWidget {
   final bool isEditing;
+  final Client? client;
 
-  const EditClientScreen({super.key, this.isEditing = true});
+  const EditClientScreen({super.key, this.isEditing = true, this.client});
+
+  @override
+  State<EditClientScreen> createState() => _EditClientScreenState();
+}
+
+class _EditClientScreenState extends State<EditClientScreen> {
+  late TextEditingController _nameController;
+  late TextEditingController _emailController;
+  late TextEditingController _phoneController;
+  late TextEditingController _addressController;
+
+  @override
+  void initState() {
+    super.initState();
+    _nameController = TextEditingController(
+      text: widget.isEditing ? widget.client?.name : '',
+    );
+    _emailController = TextEditingController(
+      text: widget.isEditing ? widget.client?.email : '',
+    );
+    _phoneController = TextEditingController(
+      text: widget.isEditing ? widget.client?.phone : '',
+    );
+    _addressController = TextEditingController(
+      text: widget.isEditing ? widget.client?.address : '',
+    );
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _phoneController.dispose();
+    _addressController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          isEditing ? 'Editar Cliente' : 'Novo Cliente',
+          super.widget.isEditing ? 'Editar Cliente' : 'Novo Cliente',
           style: const TextStyle(color: Colors.black),
         ),
         backgroundColor: Colors.transparent,
@@ -27,7 +68,9 @@ class EditClientScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                isEditing ? 'Informações do Cliente' : 'Cadastro de Cliente',
+                super.widget.isEditing
+                    ? 'Informações do Cliente'
+                    : 'Cadastro de Cliente',
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -36,27 +79,34 @@ class EditClientScreen extends StatelessWidget {
               const SizedBox(height: 20),
 
               // Campo Nome
-              const CustomTextField(label: 'Nome', hint: 'Ex: Brown Fox'),
+              CustomTextField(
+                label: 'Nome',
+                hint: 'Ex: Brown Fox',
+                controller: _nameController,
+              ),
               const SizedBox(height: 15),
 
               // Campo E-mail
-              const CustomTextField(
+              CustomTextField(
                 label: 'E-mail',
                 hint: 'Ex: brownfox@gmail.com',
+                controller: _emailController,
               ),
               const SizedBox(height: 15),
 
               // Campo Telefone
-              const CustomTextField(
+              CustomTextField(
                 label: 'Telefone',
                 hint: 'Ex: (00) 01234-5678',
+                controller: _phoneController,
               ),
               const SizedBox(height: 15),
 
               // Campo Endereço
-              const CustomTextField(
+              CustomTextField(
                 label: 'Endereço',
                 hint: 'Ex: Rua Um, 00, Santa Maria - RS',
+                controller: _addressController,
                 maxLines: 3,
               ),
 
@@ -84,9 +134,36 @@ class EditClientScreen extends StatelessWidget {
                   const SizedBox(width: 15),
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: () {
-                        // Lógica para salvar ou cadastrar
-                        Navigator.pop(context);
+                      onPressed: () async {
+                        final service = ClientService();
+                        final userSession = context.read<UserSession>();
+                        final userId = userSession.user?.id;
+
+                        if (userId == null) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Erro: Usuário não identificado.')),
+                          );
+                          return;
+                        }
+
+                        final client = Client(
+                          id: widget.isEditing ? widget.client?.id : null,
+                          name: _nameController.text,
+                          email: _emailController.text,
+                          phone: _phoneController.text,
+                          address: _addressController.text,
+                          u_id: userId,
+                        );
+
+                        if (widget.isEditing) {
+                          await service.updateClient(client, userId);
+                        } else {
+                          await service.register(client);
+                        }
+
+                        if (mounted) {
+                          Navigator.pop(context);
+                        }
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.black,
@@ -96,7 +173,7 @@ class EditClientScreen extends StatelessWidget {
                         ),
                       ),
                       child: Text(
-                        isEditing ? 'Salvar' : 'Cadastrar',
+                        super.widget.isEditing ? 'Salvar' : 'Cadastrar',
                         style: const TextStyle(color: Colors.white),
                       ),
                     ),
@@ -115,11 +192,13 @@ class CustomTextField extends StatelessWidget {
   final String label;
   final String hint;
   final int maxLines;
+  final TextEditingController controller;
 
   const CustomTextField({
     super.key,
     required this.label,
     required this.hint,
+    required this.controller,
     this.maxLines = 1,
   });
 
@@ -134,6 +213,7 @@ class CustomTextField extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         TextField(
+          controller: controller,
           maxLines: maxLines,
           decoration: InputDecoration(
             hintText: hint,

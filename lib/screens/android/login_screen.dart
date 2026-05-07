@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:sos_project_mobile/core/auth_service.dart';
+import 'package:provider/provider.dart';
+import 'package:sos_project_mobile/core/services/auth_service.dart';
+import 'package:sos_project_mobile/core/user_session.dart';
 import 'package:sos_project_mobile/screens/android/home.dart';
 import 'package:sos_project_mobile/screens/android/register_screen.dart';
 
@@ -26,7 +28,7 @@ class LoginScreen extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.only(top: 60.0, bottom: 10.0),
                 child: Center(
-                  child: Container(
+                  child: SizedBox(
                     height: 150,
                     width: 200,
                     child: FlutterLogo(),
@@ -36,6 +38,7 @@ class LoginScreen extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 32.0, vertical: 16.0),
                 child: TextFormField(
+                  controller: emailController,
                   validator: (value) {
                     if (value != null && value.isNotEmpty) {
                       return null;
@@ -54,6 +57,7 @@ class LoginScreen extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 32.0, vertical: 16.0),
                 child: TextFormField(
+                  controller: passwordController,
                   obscureText: true,
                   validator: (value) {
                     if (value != null && value.isNotEmpty) {
@@ -71,39 +75,54 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
               TextButton(
-                onPressed: () => print("Esqueceu a senha haha"),
+                onPressed: () => {},
                 child: Text(
                   'Esqueceu sua senha?',
                   style: TextStyle(color: Colors.blue, fontSize: 15),
                 ),
               ),
-              Container(
+              SizedBox(
                 height: 50,
                 width: 250,
-                child: Expanded(
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      bool valido = _formKey.currentState!.validate();
-                      if (valido) {
-                        final User? user = await AuthService().login(
-                          emailController.text,
-                          passwordController.text,
-                        );
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => Home()),
-                        );
+                child: ElevatedButton(
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      User? user = await AuthService().login(
+                        emailController.text,
+                        passwordController.text,
+                      );
+
+                      if (user != null) {
+                        if (context.mounted) {
+                          Provider.of<UserSession>(
+                            context,
+                            listen: false,
+                          ).setUser(user);
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => Home()),
+                          );
+                        }
+                      } else {
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("E-mail ou senha inválida."),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        }
                       }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadiusGeometry.circular(20),
-                      ),
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadiusGeometry.circular(20),
                     ),
-                    child: Text('Login', style: TextStyle(fontSize: 28)),
                   ),
+                  child: Text('Login', style: TextStyle(fontSize: 28)),
                 ),
               ),
               const SizedBox(height: 90),

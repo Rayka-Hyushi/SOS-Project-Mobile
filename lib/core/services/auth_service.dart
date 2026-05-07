@@ -1,6 +1,6 @@
-import 'package:sos_project_mobile/core/dao/userDAO.dart';
+import 'package:sos_project_mobile/core/dao/user_dao.dart';
 
-import 'model/user.dart';
+import '../model/user.dart';
 
 class AuthService {
   final UserDAO _userDAO = UserDAO();

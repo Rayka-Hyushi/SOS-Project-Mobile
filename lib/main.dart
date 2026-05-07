@@ -2,7 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:sos_project_mobile/screens/android/sosapp.dart';
+
+import 'core/user_session.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,5 +25,10 @@ void main() {
   if (Platform.isIOS) {
     debugPrint('App no IOS');
   }
-  runApp(SOSApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => UserSession(),
+      child: const SOSApp(),
+    ),
+  );
 }

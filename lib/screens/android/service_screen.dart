@@ -1,11 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sos_project_mobile/core/dao/service_dao.dart';
+import 'package:sos_project_mobile/core/model/services.dart';
+import 'package:sos_project_mobile/core/user_session.dart';
 import 'package:sos_project_mobile/screens/android/edit_service_screen.dart';
 
-class ServiceScreen extends StatelessWidget {
+class ServiceScreen extends StatefulWidget {
   const ServiceScreen({super.key});
 
   @override
+  State<ServiceScreen> createState() => _ServiceScreenState();
+}
+
+class _ServiceScreenState extends State<ServiceScreen> {
+  final ServiceDao _serviceDAO = ServiceDao();
+
+  @override
   Widget build(BuildContext context) {
+    final user = Provider.of<UserSession>(context).user;
+
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -25,14 +38,34 @@ class ServiceScreen extends StatelessWidget {
               const SizedBox(height: 20),
 
               Expanded(
-                child: ListView(
-                  children: const [
-                    ServiceCard(),
-                    ServiceCard(),
-                    ServiceCard(),
-                    ServiceCard(),
-                    ServiceCard(),
-                  ],
+                child: FutureBuilder<List<Services>>(
+                    future: _serviceDAO.findAllServices(user?.id ?? 0),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+
+                      if (snapshot.hasError) {
+                        return Center(
+                          child: Text("Erro ao carregar: ${snapshot.error}"),
+                        );
+                      }
+
+                      final listaServicos = snapshot.data ?? [];
+                      if (listaServicos.isEmpty) {
+                        return const Center(
+                          child: Text("Nenhum serviço encontrado."),
+                        );
+                      }
+
+                      return ListView.builder(
+                          itemCount: listaServicos.length,
+                          itemBuilder: (context, index) {
+                            final service = listaServicos[index];
+                            return ServiceCard(service: service);
+                          },
+                      );
+                    }
                 ),
               ),
             ],
@@ -48,6 +81,8 @@ class ServiceScreen extends StatelessWidget {
               builder: (context) => const EditServiceScreen(isEditing: false),
             ),
           );
+
+          setState(() {});
         },
         backgroundColor: Colors.white,
         shape: const CircleBorder(side: BorderSide(color: Colors.black12)),
@@ -58,7 +93,8 @@ class ServiceScreen extends StatelessWidget {
 }
 
 class ServiceCard extends StatelessWidget {
-  const ServiceCard({super.key});
+  final Services service;
+  const ServiceCard({super.key, required this.service});
 
   @override
   Widget build(BuildContext context) {
@@ -72,20 +108,20 @@ class ServiceCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Serviço: Troca de Tela', style: TextStyle(fontSize: 16)),
-          const Text(
-            'Descrição: Remoção de tela antiga e aplicação de uma nova.',
+          Text('Serviço: ${service.servico}', style: const TextStyle(fontSize: 16)),
+          Text(
+            'Descrição: ${service.desc}',
           ),
           const SizedBox(height: 12),
 
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
-                'Valor: R\$ 80,00',
+              Text(
+                'Valor: R\$ ${service.valor}',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
               ),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               Flexible(
                 child: OutlinedButton(
                   onPressed: () {
@@ -93,7 +129,7 @@ class ServiceCard extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                         builder: (context) =>
-                            const EditServiceScreen(isEditing: true),
+                            EditServiceScreen(isEditing: true, service: service),
                       ),
                     );
                   },

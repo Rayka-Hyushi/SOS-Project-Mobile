@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sos_project_mobile/screens/android/login_screen.dart';
+
+import '../../core/user_session.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -162,7 +166,14 @@ class ProfileScreen extends StatelessWidget {
               const SizedBox(height: 25),
 
               OutlinedButton(
-                onPressed: () {},
+                onPressed: () {
+                  context.read<UserSession>().clearSession();
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => LoginScreen()),
+                      (route) => false,
+                  );
+                },
                 style: OutlinedButton.styleFrom(
                   side: const BorderSide(color: Colors.black),
                   minimumSize: const Size(180, 45),
