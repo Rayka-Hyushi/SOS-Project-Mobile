@@ -18,8 +18,6 @@ class AppDatabase {
   Future<Database> _InitDatabase() async {
     final path = join(await getDatabasesPath(), 'database.db');
 
-    await deleteDatabase(path);
-
     return openDatabase(
       path,
       version: 1,
