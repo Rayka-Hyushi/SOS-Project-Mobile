@@ -1,7 +1,6 @@
 import 'package:sos_project_mobile/core/app_database.dart';
 import 'package:uuid/uuid.dart';
 import '../model/order.dart';
-import '../model/services.dart';
 
 class OrderDAO {
   static const String table = 'orders';
