@@ -148,6 +148,7 @@ class _EditClientScreenState extends State<EditClientScreen> {
 
                         final client = Client(
                           id: widget.isEditing ? widget.client?.id : null,
+                          uuid: widget.client?.uuid,
                           name: _nameController.text,
                           email: _emailController.text,
                           phone: _phoneController.text,

@@ -15,29 +15,29 @@ class EditServiceScreen extends StatefulWidget {
 }
 
 class _EditServiceScreenState extends State<EditServiceScreen> {
-  late TextEditingController _servicoController;
-  late TextEditingController _descController;
-  late TextEditingController _valorController;
+  late TextEditingController _serviceController;
+  late TextEditingController _descriptionController;
+  late TextEditingController _valueController;
 
   @override
   void initState() {
     super.initState();
-    _servicoController = TextEditingController(
-      text: widget.isEditing ? widget.service?.servico : '',
+    _serviceController = TextEditingController(
+      text: widget.isEditing ? widget.service?.service : '',
     );
-    _descController = TextEditingController(
-      text: widget.isEditing ? widget.service?.desc : '',
+    _descriptionController = TextEditingController(
+      text: widget.isEditing ? widget.service?.description : '',
     );
-    _valorController = TextEditingController(
-      text: widget.isEditing ? widget.service?.valor.toString() : '',
+    _valueController = TextEditingController(
+      text: widget.isEditing ? widget.service?.value.toString() : '',
     );
   }
 
   @override
   void dispose() {
-    _servicoController.dispose();
-    _descController.dispose();
-    _valorController.dispose();
+    _serviceController.dispose();
+    _descriptionController.dispose();
+    _valueController.dispose();
     super.dispose();
   }
 
@@ -46,7 +46,7 @@ class _EditServiceScreenState extends State<EditServiceScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          super.widget.isEditing ? 'Editar Serviço' : 'Novo Serviço',
+          widget.isEditing ? 'Editar Serviço' : 'Novo Serviço',
           style: const TextStyle(color: Colors.black),
         ),
         backgroundColor: Colors.transparent,
@@ -63,7 +63,7 @@ class _EditServiceScreenState extends State<EditServiceScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                super.widget.isEditing
+                widget.isEditing
                     ? 'Informações do Serviço'
                     : 'Cadastro de Serviço',
                 style: const TextStyle(
@@ -77,7 +77,7 @@ class _EditServiceScreenState extends State<EditServiceScreen> {
               CustomTextField(
                 label: 'Serviço',
                 hint: 'Ex: Troca de Tela',
-                controller: _servicoController,
+                controller: _serviceController,
               ),
               const SizedBox(height: 15),
 
@@ -85,7 +85,7 @@ class _EditServiceScreenState extends State<EditServiceScreen> {
               CustomTextField(
                 label: 'Descrição',
                 hint: 'Ex: Remoção de tela antiga e aplicação de uma nova.',
-                controller: _descController,
+                controller: _descriptionController,
                 maxLines: 3,
               ),
               const SizedBox(height: 15),
@@ -94,7 +94,8 @@ class _EditServiceScreenState extends State<EditServiceScreen> {
               CustomTextField(
                 label: 'Valor',
                 hint: 'Ex: 80,00',
-                controller: _valorController,
+                controller: _valueController,
+                keyboardType: TextInputType.number,
               ),
 
               const SizedBox(height: 40),
@@ -135,19 +136,19 @@ class _EditServiceScreenState extends State<EditServiceScreen> {
                           return;
                         }
 
-                        // Tratamento simples para o valor numérico
                         double valorParsed =
                             double.tryParse(
-                              _valorController.text.replaceAll(',', '.'),
+                              _valueController.text.replaceAll(',', '.'),
                             ) ??
                             0.0;
 
                         final serviceObj = Services(
                           id: widget.isEditing ? widget.service?.id : null,
-                          servico: _servicoController.text,
-                          desc: _descController.text,
-                          valor: valorParsed,
-                          u_id: userId,
+                          uuid: widget.service?.uuid,
+                          service: _serviceController.text,
+                          description: _descriptionController.text,
+                          value: valorParsed,
+                          uId: userId,
                         );
 
                         if (widget.isEditing) {
@@ -157,7 +158,7 @@ class _EditServiceScreenState extends State<EditServiceScreen> {
                         }
 
                         if (mounted) {
-                          Navigator.pop(context);
+                          Navigator.pop(context, true);
                         }
                       },
                       style: ElevatedButton.styleFrom(
@@ -168,7 +169,7 @@ class _EditServiceScreenState extends State<EditServiceScreen> {
                         ),
                       ),
                       child: Text(
-                        super.widget.isEditing ? 'Salvar' : 'Cadastrar',
+                        widget.isEditing ? 'Salvar' : 'Cadastrar',
                         style: const TextStyle(color: Colors.white),
                       ),
                     ),
@@ -188,6 +189,7 @@ class CustomTextField extends StatelessWidget {
   final String hint;
   final int maxLines;
   final TextEditingController controller;
+  final TextInputType keyboardType;
 
   const CustomTextField({
     super.key,
@@ -195,6 +197,7 @@ class CustomTextField extends StatelessWidget {
     required this.hint,
     required this.controller,
     this.maxLines = 1,
+    this.keyboardType = TextInputType.text,
   });
 
   @override
@@ -210,6 +213,7 @@ class CustomTextField extends StatelessWidget {
         TextField(
           controller: controller,
           maxLines: maxLines,
+          keyboardType: keyboardType,
           decoration: InputDecoration(
             hintText: hint,
             hintStyle: TextStyle(color: Colors.grey[400]),

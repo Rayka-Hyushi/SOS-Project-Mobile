@@ -1,5 +1,5 @@
 import 'package:sos_project_mobile/core/app_database.dart';
-
+import 'package:uuid/uuid.dart';
 import '../model/user.dart';
 
 class UserDAO {
@@ -7,7 +7,11 @@ class UserDAO {
 
   Future<int> insertUser(User user) async {
     final db = await AppDatabase().database;
-    return await db.insert(table, user.toMap());
+    final map = user.toMap();
+    if (map['uuid'] == null) {
+      map['uuid'] = const Uuid().v4();
+    }
+    return await db.insert(table, map);
   }
 
   Future<User?> getUser(String email, String password) async {
@@ -22,19 +26,17 @@ class UserDAO {
 
   Future<int> updateUser(User user) async {
     final db = await AppDatabase().database;
-    final result = await db.update(
+    return await db.update(
       table,
       user.toMap(),
-      where: 'id = ?',
+      where: 'uid = ?',
       whereArgs: [user.id],
     );
-    return result;
   }
 
-  Future<int> deleteUser(int id) async {
+  Future<int> deleteUser(int uid) async {
     final db = await AppDatabase().database;
-    final result = await db.delete(table, where: 'id = ?', whereArgs: [id]);
-    return result;
+    return await db.delete(table, where: 'uid = ?', whereArgs: [uid]);
   }
 
   Future<List<User>> findAllUsers() async {

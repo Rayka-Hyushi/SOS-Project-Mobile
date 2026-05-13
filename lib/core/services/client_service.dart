@@ -1,7 +1,5 @@
 import 'package:sos_project_mobile/core/dao/client_dao.dart';
-
 import '../model/client.dart';
-import '../model/user.dart';
 
 class ClientService {
   final ClientDAO _clientDAO = ClientDAO();
@@ -15,16 +13,16 @@ class ClientService {
     }
   }
 
-  Future<Client?> getClient(Client client, int uid) async {
-    return await _clientDAO.getClient(client, uid);
+  Future<Client?> getClient(int cid, int uid) async {
+    return await _clientDAO.getClient(cid, uid);
   }
 
   Future<int> updateClient(Client client, int uid) async {
     return await _clientDAO.updateClient(client, uid);
   }
 
-  Future<int> deleteClient(int id, int uid) async {
-    return await _clientDAO.deleteClient(id, uid);
+  Future<int> deleteClient(int cid, int uid) async {
+    return await _clientDAO.deleteClient(cid, uid);
   }
 
   Future<List<Client>> findAllClients(int uid) async {

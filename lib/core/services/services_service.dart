@@ -1,7 +1,5 @@
 import 'package:sos_project_mobile/core/dao/service_dao.dart';
-
 import '../model/services.dart';
-import '../model/user.dart';
 
 class ServicesService {
   final ServiceDao _serviceDAO = ServiceDao();
@@ -15,16 +13,16 @@ class ServicesService {
     }
   }
 
-  Future<Services?> getService(Services service, int uid) async {
-    return await _serviceDAO.getService(service, uid);
+  Future<Services?> getService(int sid, int uid) async {
+    return await _serviceDAO.getService(sid, uid);
   }
 
   Future<int> updateService(Services service, int uid) async {
     return await _serviceDAO.updateService(service, uid);
   }
 
-  Future<int> deleteService(int id, int uid) async {
-    return await _serviceDAO.deleteService(id, uid);
+  Future<int> deleteService(int sid, int uid) async {
+    return await _serviceDAO.deleteService(sid, uid);
   }
 
   Future<List<Services>> findAllServices(int uid) async {

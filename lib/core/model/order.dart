@@ -1,63 +1,78 @@
+import 'client.dart';
+import 'user.dart';
+import 'services.dart';
+
 class Order {
-  final int? id;
-  final String equipment;
-  final String brand;
-  final String model;
-  final String sn;
-  final String problem;
+  final int? osid;
+  final String? uuid;
+  final Client? cliente;
+  final String device;
+  final String opendate;
+  final String? closedate;
   final String status;
-  final String openDate;
-  final String? closeDate;
-  final double value;
-  final int uId;
-  final int clientId;
+  final String description;
+  final double extras;
+  final double discount;
+  final double total;
+  final List<Services> servicos;
+  final User? usuario;
+
+  // Auxiliary field for DB relationship
+  String? get clienteUuid => cliente?.uuid;
+  int? get uId => usuario?.id;
 
   Order({
-    this.id,
-    required this.equipment,
-    required this.brand,
-    required this.model,
-    required this.sn,
-    required this.problem,
+    this.osid,
+    this.uuid,
+    this.cliente,
+    required this.device,
+    required this.opendate,
+    this.closedate,
     required this.status,
-    required this.openDate,
-    this.closeDate,
-    required this.value,
-    required this.uId,
-    required this.clientId,
+    required this.description,
+    this.extras = 0.0,
+    this.discount = 0.0,
+    required this.total,
+    this.servicos = const [],
+    this.usuario,
   });
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
-      'equipment': equipment,
-      'brand': brand,
-      'model': model,
-      'sn': sn,
-      'problem': problem,
+      'osid': osid,
+      'uuid': uuid,
+      'device': device,
+      'description': description,
       'status': status,
-      'open_date': openDate,
-      'close_date': closeDate,
-      'value': value,
+      'opendate': opendate,
+      'closedate': closedate,
+      'extras': extras,
+      'discount': discount,
+      'total': total,
+      'cliente_uuid': clienteUuid,
       'u_id': uId,
-      'client_id': clientId,
     };
   }
 
   factory Order.fromMap(Map<String, dynamic> map) {
     return Order(
-      id: map['id'],
-      equipment: map['equipment'],
-      brand: map['brand'],
-      model: map['model'],
-      sn: map['sn'],
-      problem: map['problem'],
-      status: map['status'],
-      openDate: map['open_date'],
-      closeDate: map['close_date'],
-      value: map['value'],
-      uId: map['u_id'],
-      clientId: map['client_id'],
+      osid: map['osid'],
+      uuid: map['uuid'],
+      cliente: map['cliente'] != null 
+          ? Client.fromMap(map['cliente']) 
+          : (map['cliente_uuid'] != null ? Client(name: '', email: '', phone: '', address: '', uuid: map['cliente_uuid']) : null),
+      device: map['device'] ?? '',
+      opendate: map['opendate'] ?? '',
+      closedate: map['closedate'],
+      status: map['status'] ?? '',
+      description: map['description'] ?? '',
+      extras: (map['extras'] ?? 0.0).toDouble(),
+      discount: (map['discount'] ?? 0.0).toDouble(),
+      total: (map['total'] ?? 0.0).toDouble(),
+      servicos: map['servicos'] != null
+          ? (map['servicos'] as List).map((x) => Services.fromMap(x)).toList()
+          : [],
+      usuario: map['usuario'] != null ? User.fromMap(map['usuario']) : null,
     );
   }
 }

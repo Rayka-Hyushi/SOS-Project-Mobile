@@ -1,23 +1,26 @@
 class Client {
   final int? id;
-  final String address;
+  final String? uuid;
+  final String name;
   final String email;
   final String phone;
-  final String name;
-  final int u_id;
+  final String address;
+  final int? u_id;
 
   Client({
     this.id,
+    this.uuid,
     required this.name,
     required this.email,
     required this.phone,
     required this.address,
-    required this.u_id,
+    this.u_id,
   });
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
+      'cid': id,
+      'uuid': uuid,
       'name': name,
       'email': email,
       'phone': phone,
@@ -28,11 +31,12 @@ class Client {
 
   factory Client.fromMap(Map<String, dynamic> map) {
     return Client(
-      id: map['id'],
-      name: map['name'],
-      email: map['email'],
-      phone: map['phone'],
-      address: map['address'],
+      id: map['cid'] ?? map['id'],
+      uuid: map['uuid'],
+      name: map['name'] ?? '',
+      email: map['email'] ?? '',
+      phone: map['phone'] ?? '',
+      address: map['address'] ?? '',
       u_id: map['u_id'],
     );
   }

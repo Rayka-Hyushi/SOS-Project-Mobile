@@ -43,10 +43,9 @@ class _OrdersScreenState extends State<OrdersScreen> {
     final query = _searchController.text.toLowerCase();
     setState(() {
       _filteredOrders = _allOrders.where((order) {
-        return order.equipment.toLowerCase().contains(query) ||
-            order.model.toLowerCase().contains(query) ||
-            order.sn.toLowerCase().contains(query) ||
-            order.id.toString().contains(query);
+        return order.device.toLowerCase().contains(query) ||
+            order.description.toLowerCase().contains(query) ||
+            order.osid.toString().contains(query);
       }).toList();
     });
   }
@@ -136,21 +135,16 @@ class OrderCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'OS${order.id.toString().padLeft(3, '0')}',
+            'OS${order.osid.toString().padLeft(3, '0')}',
             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
-          Text('SN: ${order.sn}'),
+          Text('Dispositivo: ${order.device}'),
           const SizedBox(height: 4),
-          Row(
-            children: [
-              Expanded(child: Text('Marca: ${order.brand}')),
-              Expanded(child: Text('Modelo: ${order.model}')),
-            ],
-          ),
+          Text('Descrição: ${order.description}'),
           const SizedBox(height: 4),
-          Text('Data de Abertura: ${order.openDate}'),
-          if (order.closeDate != null) Text('Data de Fechamento: ${order.closeDate}'),
+          Text('Data de Abertura: ${order.opendate}'),
+          if (order.closedate != null) Text('Data de Fechamento: ${order.closedate}'),
           const SizedBox(height: 12),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

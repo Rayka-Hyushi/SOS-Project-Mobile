@@ -1,35 +1,39 @@
 class Services {
   final int? id;
-  final String servico;
-  final String desc;
-  final double valor;
-  final int u_id;
+  final String? uuid;
+  final String service;
+  final String description;
+  final double value;
+  final int? uId;
 
   Services({
     this.id,
-    required this.servico,
-    required this.desc,
-    required this.valor,
-    required this.u_id,
+    this.uuid,
+    required this.service,
+    required this.description,
+    required this.value,
+    this.uId,
   });
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
-      'servico': servico,
-      'desc': desc,
-      'valor': valor,
-      'u_id': u_id,
+      'sid': id,
+      'uuid': uuid,
+      'service': service,
+      'description': description,
+      'value': value,
+      'u_id': uId,
     };
   }
 
   factory Services.fromMap(Map<String, dynamic> map) {
     return Services(
-      id: map['id'],
-      servico: map['servico'],
-      desc: map['desc'],
-      valor: map['valor'],
-      u_id: map['u_id'],
+      id: map['sid'] ?? map['id'],
+      uuid: map['uuid'],
+      service: map['service'] ?? map['servico'] ?? '',
+      description: map['description'] ?? map['desc'] ?? '',
+      value: (map['value'] ?? map['valor'] ?? 0.0).toDouble(),
+      uId: map['u_id'] ?? map['uId'],
     );
   }
 }

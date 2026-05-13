@@ -80,9 +80,7 @@ class _ServiceScreenState extends State<ServiceScreen> {
             MaterialPageRoute(
               builder: (context) => const EditServiceScreen(isEditing: false),
             ),
-          );
-
-          setState(() {});
+          ).then((_) => setState(() {}));
         },
         backgroundColor: Colors.white,
         shape: const CircleBorder(side: BorderSide(color: Colors.black12)),
@@ -108,9 +106,9 @@ class ServiceCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Serviço: ${service.servico}', style: const TextStyle(fontSize: 16)),
+          Text('Serviço: ${service.service}', style: const TextStyle(fontSize: 16)),
           Text(
-            'Descrição: ${service.desc}',
+            'Descrição: ${service.description}',
           ),
           const SizedBox(height: 12),
 
@@ -118,10 +116,10 @@ class ServiceCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Valor: R\$ ${service.valor}',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                'Valor: R\$ ${service.value.toStringAsFixed(2)}',
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
               ),
-              SizedBox(width: 8),
+              const SizedBox(width: 8),
               Flexible(
                 child: OutlinedButton(
                   onPressed: () {
@@ -131,7 +129,9 @@ class ServiceCard extends StatelessWidget {
                         builder: (context) =>
                             EditServiceScreen(isEditing: true, service: service),
                       ),
-                    );
+                    ).then((_) {
+                      // Note: This won't refresh ServiceScreen automatically without a callback or Provider
+                    });
                   },
                   style: OutlinedButton.styleFrom(
                     side: const BorderSide(color: Colors.black),
